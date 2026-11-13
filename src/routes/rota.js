@@ -786,7 +786,6 @@ router.get("/servicos/referencias/:id", async (req, res) => {
         erro: "Foto do serviço não encontrada."
       });
     }
-
     const foto = resultado.rows[0];
 
     res.setHeader("Content-Type", foto.tipo_mime);
@@ -801,5 +800,7 @@ router.get("/servicos/referencias/:id", async (req, res) => {
   }
 });
 
-
 module.exports = router;
+
+
+

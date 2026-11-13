@@ -9,7 +9,7 @@ services:
     environment:
       - NODE_ENV=development
       - PORT=3000
-      - JWT_SECRET=troque-esta-chave-por-uma-chave-secreta-forte
+      - JWT_SECRET=${JWT_SECRET}
     ports:
       - "${PORT:-3000}:3000"
     depends_on:

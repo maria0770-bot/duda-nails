@@ -101,7 +101,7 @@ O relacionamento entre agendamentos e serviços é do tipo N:N (muitos para muit
 
 ## Documentação das rotas
 
-Todas as rotas da API estão descritas no arquivo [ROTAS.md](ROTAS.md).
+Todas as rotas da API estão descritas no arquivo [rotas.md](rotas.md).
 
 ## Observações
 
