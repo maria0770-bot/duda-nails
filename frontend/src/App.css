@@ -1,0 +1,174 @@
+
+/* Configurações gerais */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background-color: #171416;
+  color: #f5eee6;
+}
+
+.site {
+  min-height: 100vh;
+}
+
+/* Cabeçalho */
+header {
+  background-color: #211c1f;
+  padding: 25px 8%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #b9975b;
+}
+
+header h1 {
+  color: #d8b67b;
+  font-family: Georgia, serif;
+  font-size: 30px;
+  letter-spacing: 2px;
+  margin: 0;
+}
+
+nav {
+  display: flex;
+  gap: 30px;
+}
+
+nav a {
+  color: #f5eee6;
+  text-decoration: none;
+  font-size: 15px;
+  transition: 0.3s;
+}
+
+nav a:hover {
+  color: #d8b67b;
+}
+
+/* Página inicial */
+.inicio {
+  background: linear-gradient(
+    135deg,
+    #171416,
+    #382c30,
+    #171416
+  );
+  text-align: center;
+  padding: 110px 20px;
+}
+
+.inicio h2 {
+  color: #e4c58f;
+  font-family: Georgia, serif;
+  font-size: 42px;
+  font-weight: normal;
+}
+
+.inicio p {
+  color: #e6d9cd;
+  font-size: 18px;
+  margin-bottom: 40px;
+}
+
+.inicio a {
+  display: inline-block;
+  background-color: #d8b67b;
+  color: #211c1f;
+  padding: 15px 35px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.inicio a:hover {
+  background-color: #f0d5a2;
+  transform: translateY(-3px);
+}
+
+/* Serviços */
+.servicos {
+  padding: 80px 8%;
+  text-align: center;
+  background-color: #1c181a;
+}
+
+.servicos h2 {
+  font-family: Georgia, serif;
+  font-size: 35px;
+  color: #d8b67b;
+  margin-bottom: 40px;
+}
+
+.lista-servicos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 25px;
+}
+
+.card {
+  background-color: #292327;
+  padding: 40px 25px;
+  border: 1px solid #705a40;
+  border-radius: 8px;
+  transition: 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  border-color: #d8b67b;
+  box-shadow: 0 8px 25px #00000050;
+}
+
+.card h3 {
+  font-family: Georgia, serif;
+  color: #f5eee6;
+  font-size: 23px;
+}
+
+.card p {
+  color: #d8b67b;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+/* Rodapé */
+footer {
+  background-color: #211c1f;
+  border-top: 1px solid #705a40;
+  padding: 25px;
+  text-align: center;
+  color: #d8b67b;
+}
+
+/* Celulares */
+@media (max-width: 600px) {
+  header {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  header h1 {
+    font-size: 25px;
+  }
+
+  .inicio {
+    padding: 75px 20px;
+  }
+
+  .inicio h2 {
+    font-size: 30px;
+  }
+
+  .servicos {
+    padding: 50px 6%;
+  }
+}
