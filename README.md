@@ -106,3 +106,15 @@ Todas as rotas da API estão descritas no arquivo [rotas.md](rotas.md).
 ## Observações
 
 O projeto foi desenvolvido para fins acadêmicos e utiliza configurações locais de desenvolvimento.
+
+## Criar administrador
+
+Depois de iniciar o projeto com Docker, execute:
+
+docker compose exec -it node node scripts/criar-admin.js
+
+O programa solicitará nome, e-mail e senha.
+
+A senha será criptografada com bcrypt.
+
+Após criar o administrador, utilize a rota POST /hello/login para entrar e obter o token JWT.
