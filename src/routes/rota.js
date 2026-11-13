@@ -483,8 +483,7 @@ router.post("/login", async (req, res) => {
   id: usuario.id,
   tipo: usuario.tipo
   },
-  process.env.JWT_SECRET || "chave-temporaria-duda-nails",
-  { expiresIn: "1h" }
+  process.env.JWT_SECRET,  { expiresIn: "1h" }
   );
   
   res.status(200).json({
