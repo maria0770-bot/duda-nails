@@ -1,12 +1,14 @@
 
 import { useEffect, useState } from 'react'
 import './App.css'
+import Login from './Login'
 
 function App() {
   const [servicos, setServicos] = useState([])
+  const [token, setToken] = useState(null)
 
   useEffect(() => {
-    fetch('http://localhost:3000/hello/servicos')
+fetch('/api/servicos') 
       .then((resposta) => resposta.json())
       .then((dados) => setServicos(dados))
       .catch((erro) => console.log('Erro:', erro))
@@ -19,6 +21,7 @@ function App() {
         <nav>
           <a href="#inicio">Início</a>
           <a href="#servicos">Serviços</a>
+          <a href="#login">Login</a>
         </nav>
       </header>
 
@@ -27,6 +30,19 @@ function App() {
           <h2>Bem-vinda ao Duda Nails!</h2>
           <p>Unhas lindas, feitas com carinho e dedicação.</p>
           <a href="#servicos">Conheça nossos serviços</a>
+        </section>
+
+        <section id="login">
+          {token ? (
+            <div>
+              <p>Você está conectado!</p>
+              <button onClick={() => setToken(null)}>
+                Sair
+              </button>
+            </div>
+          ) : (
+            <Login aoEntrar={setToken} />
+          )}
         </section>
 
         <section id="servicos" className="servicos">

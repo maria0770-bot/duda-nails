@@ -1,4 +1,4 @@
-
+﻿
 # Documentação da API — Duda Nails
 
 ## Sobre o projeto
@@ -9,7 +9,7 @@ A API permite cadastrar clientes, consultar serviços, realizar agendamentos e e
 
 ## Endereço da API
 
-http://localhost:3000/hello
+http://localhost:3000/api
 
 ## 1. Página inicial
 
@@ -707,3 +707,38 @@ O cabeçalho `Content-Type` informa o formato do arquivo, como:
 **Possíveis respostas de erro:**
 - `404`: foto ou vídeo do serviço não encontrado.
 - `500`: erro ao carregar o arquivo.
+
+## Cancelar agendamento
+
+DELETE /api/agendamentos/:id
+
+Autenticação: token JWT obrigatório.
+
+Permissões:
+- Administrador: pode cancelar qualquer agendamento.
+- Cliente: pode cancelar apenas seus próprios agendamentos.
+
+Respostas:
+- 200: Agendamento cancelado com sucesso.
+- 401: Token ausente ou inválido.
+- 403: Sem permissão para cancelar.
+- 404: Agendamento não encontrado.
+
+O cancelamento exclui o agendamento e seus vínculos com os serviços.
+
+## Validações e tratamento de erros
+
+### Serviços
+- O preço deve ser numérico e não pode ser negativo.
+- Serviços vinculados a agendamentos ou referências não podem ser excluídos.
+- A tentativa de exclusão retorna o status 409.
+
+### Agendamentos
+- A data deve estar no formato AAAA-MM-DD.
+- O horário deve estar no formato HH:MM.
+- Não são permitidas datas inválidas ou agendamentos no passado.
+
+### Upload de arquivos
+- O tamanho máximo permitido é de 10 MB.
+- São aceitos formatos de imagem e vídeo conforme a rota.
+- Arquivos inválidos retornam o status 400 com uma mensagem em JSON.

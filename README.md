@@ -1,4 +1,4 @@
-
+﻿
 # 💅 Duda Nails
 
 ## Sobre o projeto
@@ -55,11 +55,11 @@ Na primeira execução, o Docker criará o banco de dados e executará o arquivo
 
 API:
 
-http://localhost:3000/hello
+http://localhost:3000/api
 
 Lista de serviços:
 
-http://localhost:3000/hello/servicos
+http://localhost:3000/api/servicos
 
 Gerenciador do banco de dados (Pgweb):
 
@@ -117,4 +117,4 @@ O programa solicitará nome, e-mail e senha.
 
 A senha será criptografada com bcrypt.
 
-Após criar o administrador, utilize a rota POST /hello/login para entrar e obter o token JWT.
+Após criar o administrador, utilize a rota POST /api/login para entrar e obter o token JWT.

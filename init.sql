@@ -21,7 +21,7 @@ CREATE TABLE clientes (
 CREATE TABLE servicos (
     id SERIAL PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
-    preco DECIMAL(10,2) NOT NULL,
+    preco DECIMAL(10,2) NOT NULL CHECK (preco >= 0),
     referencias TEXT
 );
 

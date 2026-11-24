@@ -18,8 +18,7 @@ erro: "Formato do token inválido."
 }
 
 try {
-const segredo =
-process.env.JWT_SECRET || "chave-temporaria-duda-nails";
+const segredo = process.env.JWT_SECRET;
 
 const dados = jwt.verify(partes[1], segredo);
 
