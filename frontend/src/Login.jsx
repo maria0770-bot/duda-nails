@@ -33,7 +33,7 @@ function Login({ aoEntrar }) {
         return
       }
 
-      aoEntrar(dados.token)
+      aoEntrar(dados)
       setMensagem('Login realizado com sucesso!')
       setSenha('')
     } catch (erro) {

@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken");
 
 router.post("/usuarios", async (req, res) => {
   try {
-    const { nome, email, senha } = req.body;
+    const { nome, email, senha, telefone } = req.body;
 
     if (!nome || !email || !senha) {
       return res.status(400).json({
@@ -14,11 +14,11 @@ router.post("/usuarios", async (req, res) => {
       });
     }
 
-    if (senha.length < 6) {
-      return res.status(400).json({
-        erro: "A senha deve ter pelo menos 6 caracteres."
-      });
-    }
+   if (senha.length < 8) {
+  return res.status(400).json({
+    erro: "A senha deve ter pelo menos 8 caracteres."
+  });
+}
 
     const senhaCriptografada = await bcrypt.hash(senha, 10);
 
@@ -32,11 +32,11 @@ router.post("/usuarios", async (req, res) => {
 
       const novoUsuario = resultado.rows[0];
 
-      await conexao.query(
-        `INSERT INTO clientes (nome, usuario_id)
-         VALUES ($1, $2)`,
-        [nome, novoUsuario.id]
-      );
+     await conexao.query(
+  `INSERT INTO clientes (nome, telefone, usuario_id)
+   VALUES ($1, $2, $3)`,
+  [nome, telefone || null, novoUsuario.id]
+);
 
       return novoUsuario;
     });
@@ -101,21 +101,26 @@ router.post("/login", async (req, res) => {
   id: usuario.id,
   tipo: usuario.tipo
   },
-  process.env.JWT_SECRET,  { expiresIn: "1h" }
-  );
+  process.env.JWT_SECRET, { expiresIn: "1h" }  
+);
   
   res.status(200).json({
-  mensagem: "Login realizado com sucesso.",
-  token: token
+    mensagem: "Login realizado com sucesso.",
+    token: token,
+    usuario: {
+      id: usuario.id,
+      nome: usuario.nome,
+      tipo: usuario.tipo
+    }
   });
-  
+
   } catch (erro) {
-  console.error(erro);
-  res.status(500).json({
-  erro: "Erro ao realizar login."
-  });
+    console.error(erro);
+    res.status(500).json({
+    erro: "Erro ao realizar login."
+    });
   }
-  });
+});
   
 // Enviar foto ou vídeo de referência de um serviço
 

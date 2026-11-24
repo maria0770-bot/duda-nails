@@ -169,15 +169,20 @@ router.delete("/clientes/:id", verificarToken, async (req, res) => {
       cliente: resultado.rows[0]
     });
 
-  } catch (erro) {
+ } catch (erro) {
     console.error(erro);
+
+    if (erro.code === "23503") {
+      return res.status(409).json({
+        erro: "Não é possível excluir este cliente, pois existem registros vinculados a ele."
+      });
+    }
 
     res.status(500).json({
       erro: "Erro ao excluir cliente."
     });
   }
 });
-
 
  // Edita serviço
 

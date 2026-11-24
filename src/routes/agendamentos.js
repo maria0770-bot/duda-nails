@@ -8,9 +8,21 @@ router.get("/agendamentos", verificarToken, async (req, res) => {
     let resultado;
 
     if (req.usuario.tipo === "admin") {
-      resultado = await db.query(
-        `SELECT * FROM agendamentos ORDER BY data, horario`
-      );
+     resultado = await db.query(
+  `SELECT agendamentos.*,
+          clientes.nome AS cliente_nome,
+          ARRAY(
+            SELECT servicos.nome
+            FROM agendamento_servicos
+            JOIN servicos
+              ON servicos.id = agendamento_servicos.servico_id
+            WHERE agendamento_servicos.agendamento_id = agendamentos.id
+          ) AS servicos
+   FROM agendamentos
+   JOIN clientes
+     ON clientes.id = agendamentos.cliente_id
+   ORDER BY data, horario`
+);
     } else {
       const cliente = await db.query(
         "SELECT id FROM clientes WHERE usuario_id = $1",
@@ -23,10 +35,18 @@ router.get("/agendamentos", verificarToken, async (req, res) => {
         });
       }
 
-      resultado = await db.query(
-        `SELECT * FROM agendamentos
-         WHERE cliente_id = $1
-         ORDER BY data, horario`,
+     resultado = await db.query(
+        `SELECT agendamentos.*,
+                ARRAY(
+                  SELECT servicos.nome
+                  FROM agendamento_servicos
+                  JOIN servicos
+                    ON servicos.id = agendamento_servicos.servico_id
+                  WHERE agendamento_servicos.agendamento_id = agendamentos.id
+                ) AS servicos
+        FROM agendamentos
+        WHERE agendamentos.cliente_id = $1
+        ORDER BY data, horario`,
         [cliente.rows[0].id]
       );
     }

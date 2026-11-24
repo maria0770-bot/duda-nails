@@ -66,7 +66,10 @@ http://localhost:3000/api
 **Parâmetros obrigatórios:**
 - `nome`: nome do usuário.
 - `email`: e-mail do usuário.
-- `senha`: senha com pelo menos 6 caracteres.
+- `senha`: senha com pelo menos 8 caracteres.
+
+**Parâmetro opcional:**
+- `telefone`: telefone do cliente.
 
 **Exemplo de requisição:**
 
@@ -119,7 +122,12 @@ http://localhost:3000/api
 ```json
 {
   "mensagem": "Login realizado com sucesso.",
-  "token": "TOKEN_JWT_GERADO"
+  "token": "TOKEN_JWT_GERADO",
+  "usuario": {
+    "id": 4,
+    "nome": "Ana Clara",
+    "tipo": "cliente"
+  }
 }
 ```
 
@@ -296,6 +304,7 @@ DELETE `/clientes/4`
 **Possíveis respostas de erro:**
 - `403`: usuário sem permissão para excluir clientes.
 - `404`: cliente não encontrado.
+- `409`: cliente possui registros vinculados que impedem sua exclusão.
 - `500`: erro ao excluir cliente.
 
 ## 10. Cadastrar serviço
@@ -708,7 +717,7 @@ O cabeçalho `Content-Type` informa o formato do arquivo, como:
 - `404`: foto ou vídeo do serviço não encontrado.
 - `500`: erro ao carregar o arquivo.
 
-## Cancelar agendamento
+## 20. Cancelar agendamento
 
 DELETE /api/agendamentos/:id
 
@@ -742,3 +751,97 @@ O cancelamento exclui o agendamento e seus vínculos com os serviços.
 - O tamanho máximo permitido é de 10 MB.
 - São aceitos formatos de imagem e vídeo conforme a rota.
 - Arquivos inválidos retornam o status 400 com uma mensagem em JSON.
+
+
+## 21. Excluir referência de um serviço
+
+**Método:** DELETE
+
+**Rota:** `/referencias/:id`
+
+**Descrição:** Exclui uma foto ou vídeo cadastrado em um serviço.
+
+**Autenticação:** Token JWT obrigatório.
+
+**Permissão:** Apenas administradores.
+
+**Parâmetro:**
+- `id`: identificação da referência.
+
+**Possíveis respostas:**
+- 200: referência excluída com sucesso.
+- 401: token ausente ou inválido.
+- 403: usuário sem permissão.
+- 404: referência não encontrada.
+- 500: erro ao excluir referência.
+
+## 22. Listar referências de um cliente
+
+**Método:** GET
+
+**Rota:** `/clientes/:id/referencias`
+
+**Descrição:** Lista as fotos de referência enviadas por determinado cliente.
+
+**Autenticação:** Token JWT obrigatório.
+
+**Permissões:**
+- Administrador: pode consultar as referências de qualquer cliente.
+- Cliente: pode consultar apenas suas próprias referências.
+
+**Parâmetro:**
+- `id`: identificação do cliente.
+
+**Exemplo de resposta de sucesso (200):**
+
+```json
+[
+  {
+    "id": 1,
+    "nome_original": "unha_rosa.jpg",
+    "tipo_mime": "image/jpeg",
+    "cliente_id": 4
+  }
+]
+```
+
+**Possíveis respostas de erro:**
+- 401: token ausente ou inválido.
+- 403: usuário sem permissão.
+- 404: cliente não encontrado.
+- 500: erro ao listar referências.
+
+## 23. Consultar o próprio perfil
+
+**Método:** GET
+
+**Rota:** `/clientes/me/perfil`
+
+**Descrição:** Retorna os dados do cliente associado ao usuário autenticado.
+
+**Autenticação:** Token JWT obrigatório.
+
+**Parâmetros:** Nenhum.
+
+**Exemplo de resposta de sucesso (200):**
+
+```json
+{
+  "id": 4,
+  "nome": "Ana Clara",
+  "telefone": "11999999999"
+}
+```
+
+**Possíveis respostas de erro:**
+- 401: token ausente ou inválido.
+- 404: cadastro de cliente não encontrado.
+- 500: erro ao consultar perfil.
+
+## Validações adicionais
+
+- Clientes com registros vinculados não podem ser excluídos quando esses vínculos impedem a exclusão. O sistema retorna o status 409.
+- As referências particulares dos clientes não ficam disponíveis na galeria pública.
+- A listagem de agendamentos inclui os nomes dos serviços selecionados.
+- A listagem administrativa de agendamentos também inclui o nome do cliente.
+- O frontend trata sessões expiradas e solicita um novo login.

@@ -258,6 +258,106 @@ router.use((erro, req, res, next) => {
   next(erro);
 });
 
+// Excluir referência
+router.delete("/referencias/:id", verificarToken, async (req, res) => {
+  try {
+    if (req.usuario.tipo !== "admin") {
+      return res.status(403).json({
+        erro: "Apenas a administradora pode excluir referências."
+      });
+    }
+
+    const resultado = await db.query(
+      "DELETE FROM referencias WHERE id = $1 AND servico_id IS NOT NULL RETURNING id",
+      [req.params.id]
+    );
+
+    if (resultado.rows.length === 0) {
+      return res.status(404).json({
+        erro: "Referência do serviço não encontrada."
+      });
+    }
+
+    res.status(200).json({
+      mensagem: "Referência excluída com sucesso!"
+    });
+
+  } catch (erro) {
+    console.error(erro);
+
+    res.status(500).json({
+      erro: "Erro ao excluir referência."
+    });
+  }
+});
+
+
+router.get("/clientes/:id/referencias", verificarToken, async (req, res) => {
+  try {
+    const cliente = await db.query(
+      "SELECT id, usuario_id FROM clientes WHERE id = $1",
+      [req.params.id]
+    );
+
+    if (cliente.rows.length === 0) {
+      return res.status(404).json({
+        erro: "Cliente não encontrada."
+      });
+    }
+
+    if (
+      req.usuario.tipo !== "admin" &&
+      cliente.rows[0].usuario_id !== req.usuario.id
+    ) {
+      return res.status(403).json({
+        erro: "Você não tem permissão para visualizar essas referências."
+      });
+    }
+
+    const resultado = await db.query(
+      `SELECT id, nome_original, tipo_mime, cliente_id
+       FROM referencias
+       WHERE cliente_id = $1
+       ORDER BY id`,
+      [req.params.id]
+    );
+
+    res.setHeader("Cache-Control", "private, no-store");
+    res.status(200).json(resultado.rows);
+
+  } catch (erro) {
+    console.error(erro);
+
+    res.status(500).json({
+      erro: "Erro ao listar referências da cliente."
+    });
+  }
+});
+
+
+router.get("/clientes/me/perfil", verificarToken, async (req, res) => {
+  try {
+    const resultado = await db.query(
+      "SELECT id, nome, telefone FROM clientes WHERE usuario_id = $1",
+      [req.usuario.id]
+    );
+
+    if (resultado.rows.length === 0) {
+      return res.status(404).json({
+        erro: "Cadastro de cliente não encontrado."
+      });
+    }
+
+    res.status(200).json(resultado.rows[0]);
+
+  } catch (erro) {
+    console.error(erro);
+
+    res.status(500).json({
+      erro: "Erro ao buscar perfil da cliente."
+    });
+  }
+});
 
 
 module.exports = router;
